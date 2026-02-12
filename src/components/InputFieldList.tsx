@@ -1,39 +1,21 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaRegEdit, FaTrash } from "react-icons/fa";
 
-interface Task {
+export interface Task {
   id: number;
   title: string;
   description?: string;
   completed: boolean;
 }
 
-const InputFieldList = () => {
-  const navigate = useNavigate();
+interface InputFieldListProps {
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+}
 
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: "To Do 1", completed: false },
-    { id: 2, title: "To Do 2", completed: false },
-    { id: 3, title: "To Do 3", completed: false },
-    { id: 4, title: "To Do 4", completed: false },
-  ]);
-
-  const [input, setInput] = useState<string>("");
-
-  //  Modal State
+const InputFieldList = ({ tasks, setTasks }: InputFieldListProps) => {
   const [showModal, setShowModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
-
-  const handleAddRedirect = () => {
-    if (!input.trim()) return;
-
-    navigate("/add-list", {
-      state: { title: input },
-    });
-
-    setInput("");
-  };
 
   // Open Modal
   const openDeleteModal = (id: number) => {
@@ -44,40 +26,22 @@ const InputFieldList = () => {
   // Confirm Delete
   const confirmDelete = () => {
     if (taskToDelete !== null) {
-      setTasks(tasks.filter((task) => task.id !== taskToDelete));
+      setTasks((prev) => prev.filter((task) => task.id !== taskToDelete));
     }
     setShowModal(false);
     setTaskToDelete(null);
   };
 
   const toggleTask = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
-      ),
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
     );
   };
 
   return (
     <div className="mt-6 relative">
-      {/* Input Section */}
-      <div className="flex gap-2 mb-6">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Enter task title"
-          className="flex-1 bg-[#FBF3D5] rounded-xl px-4 py-2 outline-none border border-gray-300"
-        />
-
-        <button
-          onClick={handleAddRedirect}
-          className="bg-[#D6A99D] text-white px-4 py-2 rounded-xl hover:opacity-90 transition"
-        >
-          + ADD TASK
-        </button>
-      </div>
-
       {/* Task List */}
       {tasks.map((task) => (
         <div key={task.id} className="flex items-center gap-3 mb-4">
@@ -108,27 +72,22 @@ const InputFieldList = () => {
         </div>
       ))}
 
-      {/*  Confirmation Modal */}
+      {/* Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
-          <div className="bg-[#EDE7CF]  max-w-md w-full rounded-[40px] p-8 text-center shadow-2xl">
-            {/* Red Circle with X */}
+          <div className="bg-[#EDE7CF] max-w-md w-full rounded-[40px] p-8 text-center shadow-2xl">
             <div className="flex justify-center mb-6">
               <div className="w-24 h-24 rounded-full border-8 border-red-500 flex items-center justify-center">
                 <span className="text-red-500 text-4xl font-bold">✕</span>
               </div>
             </div>
 
-            {/* Title */}
             <h2 className="text-xl font-semibold mb-3">Are you sure?</h2>
 
-            {/* Description */}
             <p className="text-gray-700 text-sm mb-8 leading-relaxed">
-              Do you really want to delete this task? This process cannot be
-              undone.
+              Do you really want to delete this task? This process cannot be undone.
             </p>
 
-            {/* Buttons */}
             <div className="flex justify-center gap-6">
               <button
                 onClick={() => setShowModal(false)}

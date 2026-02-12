@@ -9,6 +9,7 @@ import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyCode from "./pages/auth/VerifyCode";
 import Createnewpassword  from "./pages/auth/Createnewpassword";
+import CreateTodo from "./pages/todo/createTodo";
 
 function Home() {
   return (
@@ -54,6 +55,10 @@ export function App() {
       path: "/createnewpassword",
       Component:Createnewpassword
     },
+    {
+      path: "/createtodo",
+      Component: CreateTodo
+    }
 
   ]);
   return (
