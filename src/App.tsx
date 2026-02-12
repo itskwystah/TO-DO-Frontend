@@ -1,9 +1,12 @@
+// Libraries
 import { createBrowserRouter, RouterProvider } from "react-router";
+
+// Pages
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
+import LoginPage from "./pages/auth/LoginPage";
+import DashboardPage from "./pages/todo/DashboardPage";
+import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 function Home() {
   return (

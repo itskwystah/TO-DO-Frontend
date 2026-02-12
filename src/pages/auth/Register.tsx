@@ -1,6 +1,13 @@
+// Libraries
 import { useNavigate } from "react-router-dom";
+
+// Assets
 import logo from "@/assets/logo.png";
+
+// Components
 import InputField from "@/components/InputField";
+
+
 
 export default function Register() {
   const navigate = useNavigate();
@@ -11,7 +18,7 @@ export default function Register() {
 
 
   return (
-    <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center">
+    <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center rounded-3xl">
       <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
 
       <div className="bg-[#FBF3D5] p-8 rounded-4xl shadow-md w-80 ">
@@ -55,7 +62,7 @@ export default function Register() {
             </label>
           </div>
 
-          <button
+          <button onClick={logPage}
             className="bg-[#D6A99D] text-black  py-2 rounded-xl shadow hover:opacity-90 transition w-full"
           > 
             REGISTER
