@@ -7,6 +7,8 @@ import LoginPage from "./pages/auth/LoginPage";
 import DashboardPage from "./pages/todo/DashboardPage";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import VerifyCode from "./pages/auth/VerifyCode";
+import Createnewpassword  from "./pages/auth/Createnewpassword";
 
 function Home() {
   return (
@@ -43,6 +45,14 @@ export function App() {
     {
       path: "/forgotpassword",
       Component:ForgotPassword
+    },
+    {
+      path: "/verifycode",
+      Component:VerifyCode
+    },
+    {
+      path: "/createnewpassword",
+      Component:Createnewpassword
     },
 
   ]);

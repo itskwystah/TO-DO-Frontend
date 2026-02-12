@@ -1,3 +1,6 @@
+// Libraries
+import { useNavigate } from "react-router-dom";
+
 // Assets 
 import logo from "@/assets/logo.png";
 
@@ -8,7 +11,13 @@ import InputField from "@/components/InputField";
 import { IoIosLock } from "react-icons/io";
 import { FiSend } from "react-icons/fi";
 
+
 export default function Createnewpassword() {
+    const navigate = useNavigate();
+
+  const logPage = () => {
+    navigate("/loginpage");
+  };
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex-col flex justify-center items-center">
       <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
@@ -29,14 +38,23 @@ export default function Createnewpassword() {
         <form className="flex flex-col justify-center  space-y-4">
           {/* Reusable Input Components */}
           <InputField
-            label="Email"
-            type="email"
-            placeholder="Email Address"
+            label="Password"
+            type="password"
+            placeholder="Password"
+          />
+
+          <InputField
+            label="Confirm Password"
+            type="password"
+            placeholder="Confirm Password"
           />
         </form>
             
         
-        <button className="bg-[#D6A99D] text-black  py-2 rounded-3xl shadow hover:opacity-90 transition px-4 mt-5 flex items-center justify-center gap-2 ">
+        <button 
+        type="button"
+        onClick={logPage}
+        className="bg-[#D6A99D] text-black  py-2 rounded-3xl shadow hover:opacity-90 transition px-4 mt-5 flex items-center justify-center gap-2 ">
           <FiSend />
           <span className="text-sm">Create New Password</span></button>
 
