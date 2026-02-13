@@ -1,4 +1,5 @@
 // Libraries
+import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
 // Pages
@@ -8,8 +9,8 @@ import DashboardPage from "./pages/todo/DashboardPage";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyCode from "./pages/auth/VerifyCode";
-import Createnewpassword  from "./pages/auth/Createnewpassword";
-import CreateTodo from "./pages/todo/createTodo";
+import Createnewpassword from "./pages/auth/Createnewpassword";
+// import CreateTodo from "./pages/todo/createTodo";
 
 function Home() {
   return (
@@ -18,8 +19,6 @@ function Home() {
     </div>
   );
 }
-
-
 
 export function App() {
   const router = createBrowserRouter([
@@ -31,39 +30,39 @@ export function App() {
       path: "/Home",
       Component: Home,
     },
-     {
+    {
       path: "/loginpage",
-      Component:LoginPage
+      Component: LoginPage,
     },
     {
       path: "/dashboardpage",
-      Component:DashboardPage
+      Component: DashboardPage,
     },
     {
       path: "/register",
-      Component:Register
+      Component: Register,
     },
     {
       path: "/forgotpassword",
-      Component:ForgotPassword
+      Component: ForgotPassword,
     },
     {
       path: "/verifycode",
-      Component:VerifyCode
+      Component: VerifyCode,
     },
     {
       path: "/createnewpassword",
-      Component:Createnewpassword
+      Component: Createnewpassword,
     },
-    {
-      path: "/createtodo",
-      Component: CreateTodo
-    }
-
+    // {
+    //   path: "/createtodo",
+    //   Component: CreateTodo
+    // }
   ]);
   return (
     <div>
       <RouterProvider router={router} />
+      <Toaster position="top-center" />
     </div>
   );
 }

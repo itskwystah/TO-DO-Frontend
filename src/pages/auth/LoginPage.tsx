@@ -1,19 +1,51 @@
 // Libraries
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/auth/auth.store";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 // Assets
 import logo from "@/assets/logo.png";
+import type { AcctType } from "@/types/account/account.type";
 
 // Components
 import InputField from "@/components/InputField";
 
+
 export default function LoginPage() {
-  const navigate = useNavigate();
+
+  //const { loading, setLogin } = useAuthStore();
+
+  const loading = useAuthStore((state) =>state.loading);
+  const setLogin = useAuthStore((state) => state.setLogin);
+  
+      const [form, setForm] = useState<Partial<AcctType>>({
+      email: "",
+      password: "",
+    });
+  
+  
+    const navigate = useNavigate();
+  
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setForm((prev) => ({ ...prev, [name]: value }));
+    };
+  
+    const submitForm = async (e: FormEvent) => {
+      e.preventDefault();
+      //console.log("Form: ", form);
+      const success = await setLogin(form);
+      if (success) {
+        navigate("/dashboardpage");
+      }
+    };
+
+/** 
 
   const logIn = () => {
     navigate("/dashboardpage");
   };
-
+*/
   const reg = () => {
     navigate("/register");
   };
@@ -29,20 +61,30 @@ export default function LoginPage() {
       <div className="bg-[#FBF3D5] p-8 rounded-2xl shadow-md w-80">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
-        <form className="flex flex-col space-y-4">
+        <form onSubmit={submitForm} className="flex flex-col space-y-4">
           
           {/* Reusable Input Components */}
           <InputField
             label="Email"
+            name="email"
             type="email"
+            value={form.email}
             placeholder="Enter your email"
+            onChange={handleChange}
+           // required
           />
 
           <InputField
             label="Password"
+            name="password"
             type="password"
+             value={form.password}
             placeholder="Enter your password"
+            onChange={handleChange}
+            // required
           />
+          
+          
 
           {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between text-[10px] ">
@@ -61,11 +103,11 @@ export default function LoginPage() {
 
           {/* Login Button */}
           <button
-            type="button"
-            onClick={logIn}
+            type="submit"
+            
             className="bg-[#D6A99D] text-black font-bold py-2 rounded-xl shadow hover:opacity-90 transition w-full"
           >
-            Login
+           {loading ? "logging in.." : "LOGIN"}
           </button>
 
           {/* Register Link */}
