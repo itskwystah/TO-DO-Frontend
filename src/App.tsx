@@ -11,8 +11,8 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyCode from "./pages/auth/VerifyCode";
 import Createnewpassword from "./pages/auth/Createnewpassword";
 import CreateTodo from "./pages/todo/CreateTodo";
-import UpdateTodo from "./pages/todo/updateTodo";
-// import CreateTodo from "./pages/todo/createTodo";
+import updateTodo from "./pages/todo/updateTodo";
+
 
 function Home() {
   return (
@@ -61,8 +61,8 @@ export function App() {
       Component: CreateTodo,
     },
     {
-      path: "/updatetodo",
-      Component: UpdateTodo,
+      path: "/updatetodo/:id", // <- add :id here
+      Component: updateTodo,
     },
   ]);
   return (

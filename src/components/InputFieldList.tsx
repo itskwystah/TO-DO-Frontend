@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { FaRegEdit, FaTrash } from "react-icons/fa";
+//import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "@/axios/axios-instance";
 
 export interface Task {
-  id: number;
+  id: string; // backend _id mapped to id
   title: string;
   description?: string;
   completed: boolean;
@@ -14,55 +17,87 @@ interface InputFieldListProps {
 }
 
 const InputFieldList = ({ tasks, setTasks }: InputFieldListProps) => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [taskToDelete, setTaskToDelete] = useState<number | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
-  // Open Modal
-  const openDeleteModal = (id: number) => {
+  // Open delete confirmation modal
+  const openDeleteModal = (id: string) => {
     setTaskToDelete(id);
     setShowModal(true);
   };
 
-  // Confirm Delete
-  const confirmDelete = () => {
-    if (taskToDelete !== null) {
-      setTasks((prev) => prev.filter((task) => task.id !== taskToDelete));
-    }
+  // Confirm delete task
+const confirmDelete = async () => {
+  if (!taskToDelete) return;
+  try {
+    setLoadingDelete(true);
+    // Use your axios instance
+    await axiosInstance.delete(`/todos/${taskToDelete}`);
+    // Remove the task from local state
+    setTasks((prev) => prev.filter((task) => task.id !== taskToDelete));
+  } catch (err) {
+    console.error("Error deleting task:", err);
+  } finally {
     setShowModal(false);
     setTaskToDelete(null);
-  };
+    setLoadingDelete(false);
+  }
+};
 
-  const toggleTask = (id: number) => {
+  // Toggle completed status
+  const toggleTaskCompletion = async (taskId: string) => {
+    // Find the current task
+  const task = tasks.find((t) => t.id === taskId);
+  if (!task) return;
+
+  const newCompleted = !task.completed;
+
+  // Optimistic UI update
+  setTasks((prev) =>
+    prev.map((t) =>
+      t.id === taskId ? { ...t, completed: newCompleted } : t
+    )
+  );
+
+  try {
+    // Update the database
+    await axiosInstance.patch(`/todos/${taskId}`, { completed: newCompleted });
+  } catch (err) {
+    console.error("Error updating task:", err);
+    // Rollback UI if failed
     setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+      prev.map((t) =>
+        t.id === taskId ? { ...t, completed: task.completed } : t
       )
     );
-  };
+  }
+};
 
   return (
     <div className="mt-6 relative">
-      {/* Task List */}
       {tasks.map((task) => (
         <div key={task.id} className="flex items-center gap-3 mb-4">
           <input
             type="checkbox"
             checked={task.completed}
-            onChange={() => toggleTask(task.id)}
+            onChange={() => toggleTaskCompletion(task.id)}
             className="w-4 h-4 accent-black"
           />
 
           <div className="flex justify-between items-center bg-[#FBF3D5] flex-1 rounded-xl px-4 py-3 shadow-sm">
             <span
-              className={`text-sm ${
-                task.completed ? "line-through text-gray-500" : ""
-              }`}
+              className={`text-sm ${task.completed ? "line-through text-gray-500" : ""}`}
             >
               {task.title}
             </span>
 
             <div className="flex gap-3">
-              <FaRegEdit className="text-gray-500 cursor-pointer" />
+              <FaRegEdit
+                className="text-gray-500 cursor-pointer"
+                onClick={() => navigate(`/updatetodo/${task.id}`)}
+              />
               <FaTrash
                 className="text-red-500 cursor-pointer"
                 onClick={() => openDeleteModal(task.id)}
@@ -83,9 +118,9 @@ const InputFieldList = ({ tasks, setTasks }: InputFieldListProps) => {
             </div>
 
             <h2 className="text-xl font-semibold mb-3">Are you sure?</h2>
-
             <p className="text-gray-700 text-sm mb-8 leading-relaxed">
-              Do you really want to delete this task? This process cannot be undone.
+              Do you really want to delete this task? This process cannot be
+              undone.
             </p>
 
             <div className="flex justify-center gap-6">
@@ -95,12 +130,11 @@ const InputFieldList = ({ tasks, setTasks }: InputFieldListProps) => {
               >
                 Cancel
               </button>
-
               <button
                 onClick={confirmDelete}
                 className="px-6 py-2 rounded-xl bg-red-500 text-black border border-black hover:opacity-90 transition"
               >
-                Delete
+                {loadingDelete ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
