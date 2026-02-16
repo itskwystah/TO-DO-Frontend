@@ -3,7 +3,6 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 
 import { useNavigate } from "react-router-dom";
-import type { AcctType } from "@/types/account/account.type";
 
 // Assets
 import logo from "@/assets/logo.png";
@@ -17,10 +16,11 @@ import { useAuthStore } from "@/store/auth/auth.store";
 export default function Register() {
   const { loading, setRegister } = useAuthStore();
 
-    const [form, setForm] = useState<Partial<AcctType>>({
+    const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
 
@@ -33,7 +33,7 @@ export default function Register() {
 
   const submitForm = async (e: FormEvent) => {
     e.preventDefault();
-    //console.log("Form: ", form);
+    console.log("Form: ", form);
     const success = await setRegister(form);
     if (success) {
       navigate("/loginpage");
@@ -98,6 +98,7 @@ export default function Register() {
           <InputField
             label="Confirm Password"
             type="password"
+            name="confirmPassword"
             placeholder="Confirm your password"
             onChange={handleChange}
           />

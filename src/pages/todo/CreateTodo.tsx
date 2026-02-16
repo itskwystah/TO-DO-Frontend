@@ -1,30 +1,36 @@
+// Libraries
+import { Link, } from "react-router-dom";
+
 // Assets
-import logo from "@/assets/logo2.png";
-import { Link } from "react-router-dom";
+import logo from "@/assets/Logo2.png";
+
 
 export default function CreateTodo() {
+
+
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col rounded-3xl">
 
       {/* Mobile Card Container */}
-      <div className="w-375px h-812px bg-[#9CAFAA] rounded-[40px] px-6 py-6 flex flex-col relative shadow-xl">
+      <div className="w-375px h-812px bg-[#9CAFAA] rounded-[40px] px-6 py-6 flex flex-col ">
 
         {/* Header */}
-        <div className="flex justify-between items-center">
-          <img src={logo} alt="Logo" className="h-10" />
-
-          <Link to="/">
-            <button className="bg-[#D6A99D] text-black px-4 py-2 rounded-xl shadow hover:opacity-90 transition">
-              LogOut
-            </button>
-          </Link>
+        <div className="flex flex-row justify-between">
+        <div className="py-2 px-4">
+          <img src={logo} alt="Logo" />
         </div>
 
+        
+      </div>
+
         {/* Title */}
-        <div className="mt-10 px-2">
+        <div className=" px-1 -mt-10">
           <h1 className="text-2xl font-bold tracking-wide">
             TO DO LIST
           </h1>
+          <span className="flex items-center px-1">
+          <span className="h-px w-80 bg-black"></span>
+        </span>
           <div className="h-1px bg-black w-64 mt-2"></div>
         </div>
 
@@ -38,7 +44,7 @@ export default function CreateTodo() {
               type="text"
               placeholder="Title"
               className="w-full bg-[#E8DFC8] rounded-xl px-4 py-2 border border-black 
-                         focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         focus:outline-none focus:ring-2 focus:ring-gray-500"
             />
           </div>
 
@@ -49,17 +55,20 @@ export default function CreateTodo() {
               rows={6}
               placeholder="Description"
               className="w-full bg-[#E8DFC8] rounded-xl px-4 py-3 border border-black 
-                         resize-none focus:outline-none"
+                         resize-none focus:ring-[#D6A99D]"
             />
           </div>
         </div>
 
         {/* Bottom Buttons */}
-        <div className="absolute bottom-10 right-6 flex flex-col gap-3 items-end">
+        <div className="mt-auto flex flex-col gap-3 px-2 ml-auto">
           
+          <Link to = "/createtodo">
           <button className="bg-[#E5E5E5] px-6 py-2 rounded-xl border border-black shadow-md hover:opacity-90 transition">
-            + ADD NEW TASK
+             + ADD NEW TASK
           </button>
+          </Link>
+          
 
           <Link to="/dashboardpage">
             <button className="bg-[#E5E5E5] px-6 py-2 rounded-xl border border-black shadow-md hover:opacity-90 transition">
