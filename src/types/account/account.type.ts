@@ -4,3 +4,10 @@ export type AcctType ={
     email: string;
     password: string;
 }
+
+export type AccountStoreType = {
+  account: AcctType | null;
+  loading: boolean;
+  getAccount: () => Promise<boolean>;
+  clearAccount: () => void;
+};
