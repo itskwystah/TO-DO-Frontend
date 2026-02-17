@@ -9,50 +9,42 @@ import type { AcctType } from "@/types/account/account.type";
 
 // Components
 import InputField from "@/components/InputField";
-
+import StatusModal from "@/pages/todo/components/modals"; // Import modal
 
 export default function LoginPage() {
-
-  //const { loading, setLogin } = useAuthStore();
-
-  const loading = useAuthStore((state) =>state.loading);
+  const loading = useAuthStore((state) => state.loading);
   const setLogin = useAuthStore((state) => state.setLogin);
-  
-      const [form, setForm] = useState<Partial<AcctType>>({
-      email: "",
-      password: "",
-    });
-  
-  
-    const navigate = useNavigate();
-  
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setForm((prev) => ({ ...prev, [name]: value }));
-    };
-  
-    const submitForm = async (e: FormEvent) => {
-      e.preventDefault();
-      //console.log("Form: ", form);
-      const success = await setLogin(form);
-      if (success) {
-        navigate("/dashboardpage");
-      }
-    };
 
-/** 
+  const [form, setForm] = useState<Partial<AcctType>>({
+    email: "",
+    password: "",
+  });
 
-  const logIn = () => {
-    navigate("/dashboardpage");
-  };
-*/
-  const reg = () => {
-    navigate("/register");
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Modal state
+  const navigate = useNavigate();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const forgotpass = () => {
-    navigate("/forgotpassword");
+  const submitForm = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const success = await setLogin(form);
+    if (success) {
+      setShowSuccessModal(true); // Show modal on login success
+    }
   };
+
+  // Close modal and redirect to dashboard
+  const handleModalClose = () => {
+    setShowSuccessModal(false);
+    navigate("/dashboardpage"); // Redirect after clicking OK in login successfully
+  };
+
+  const reg = () => navigate("/register");
+  const forgotpass = () => navigate("/forgotpassword");
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center rounded-3xl">
@@ -62,8 +54,6 @@ export default function LoginPage() {
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
         <form onSubmit={submitForm} className="flex flex-col space-y-4">
-          
-          {/* Reusable Input Components */}
           <InputField
             label="Email"
             name="email"
@@ -71,25 +61,23 @@ export default function LoginPage() {
             value={form.email}
             placeholder="Enter your email"
             onChange={handleChange}
-           // required
           />
 
           <InputField
             label="Password"
             name="password"
             type="password"
-             value={form.password}
+            value={form.password}
             placeholder="Enter your password"
             onChange={handleChange}
-            // required
           />
-          
-          
 
-          {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between text-[10px] ">
+          <div className="flex items-center justify-between text-[10px]">
             <label className="flex space-x-1">
-              <input type="checkbox" className="w-4 h-4 accent-[#D6A99D] rounded-sm"/>
+              <input
+                type="checkbox"
+                className="w-4 h-4 accent-[#D6A99D] rounded-sm"
+              />
               <span>Remember Me</span>
             </label>
 
@@ -101,16 +89,13 @@ export default function LoginPage() {
             </span>
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
-            
-            className="bg-[#D6A99D] text-black font-bold py-2 rounded-xl shadow hover:opacity-90 transition w-full"
+            className="bg-[#D6A99D] text-black font-bold py-2 rounded-xl shadow hover:opacity-90 transition w-full cursor-pointer"
           >
-           {loading ? "logging in.." : "LOGIN"}
+            {loading ? "logging in.." : "LOGIN"}
           </button>
 
-          {/* Register Link */}
           <div className="flex justify-center text-[10px] space-x-1">
             <span>Don't have an account?</span>
             <span
@@ -122,6 +107,13 @@ export default function LoginPage() {
           </div>
         </form>
       </div>
+
+      {/* Success Login Modal */}
+      <StatusModal
+        show={showSuccessModal}
+        type="success-login"
+        onClose={handleModalClose} // Redirects to dashboard after clicking OK
+      />
     </div>
   );
 }

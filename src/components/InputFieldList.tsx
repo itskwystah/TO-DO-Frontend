@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { FaRegEdit, FaTrash } from "react-icons/fa";
-//import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/axios/axios-instance";
+import { TiDeleteOutline, TiTickOutline } from "react-icons/ti";
 
 export interface Task {
-  id: string; // backend _id mapped to id
+  id: string;
   title: string;
   description?: string;
   completed: boolean;
@@ -13,82 +13,78 @@ export interface Task {
 
 interface InputFieldListProps {
   tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  onToggle: (taskId: string) => void;
+  loadingToggle?: string | null;
 }
 
-const InputFieldList = ({ tasks, setTasks }: InputFieldListProps) => {
+const InputFieldList = ({
+  tasks,
+  onToggle,
+  loadingToggle,
+}: InputFieldListProps) => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
-  // Open delete confirmation modal
   const openDeleteModal = (id: string) => {
     setTaskToDelete(id);
-    setShowModal(true);
+    setShowConfirmModal(true);
   };
 
-  // Confirm delete task
-const confirmDelete = async () => {
-  if (!taskToDelete) return;
-  try {
-    setLoadingDelete(true);
-    // Use your axios instance
-    await axiosInstance.delete(`/todos/${taskToDelete}`);
-    // Remove the task from local state
-    setTasks((prev) => prev.filter((task) => task.id !== taskToDelete));
-  } catch (err) {
-    console.error("Error deleting task:", err);
-  } finally {
-    setShowModal(false);
+  const closeConfirmModal = () => {
+    setShowConfirmModal(false);
     setTaskToDelete(null);
-    setLoadingDelete(false);
-  }
-};
+  };
 
-  // Toggle completed status
-  const toggleTaskCompletion = async (taskId: string) => {
-    // Find the current task
-  const task = tasks.find((t) => t.id === taskId);
-  if (!task) return;
+  const confirmDelete = async () => {
+    if (!taskToDelete) return;
 
-  const newCompleted = !task.completed;
+    try {
+      setLoadingDelete(true);
+      await axiosInstance.delete(`/todos/${taskToDelete}`);
 
-  // Optimistic UI update
-  setTasks((prev) =>
-    prev.map((t) =>
-      t.id === taskId ? { ...t, completed: newCompleted } : t
-    )
-  );
+      setShowConfirmModal(false);
+      setShowSuccessModal(true);
+      setTaskToDelete(null);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    } finally {
+      setLoadingDelete(false);
+    }
+  };
 
-  try {
-    // Update the database
-    await axiosInstance.patch(`/todos/${taskId}`, { completed: newCompleted });
-  } catch (err) {
-    console.error("Error updating task:", err);
-    // Rollback UI if failed
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId ? { ...t, completed: task.completed } : t
-      )
-    );
-  }
-};
+  const handleSuccessClose = () => {
+    setShowSuccessModal(false);
+
+    // Redirect to dashboard
+    navigate("/dashboardpage");
+
+    // Force refresh to reload updated tasks
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
 
   return (
-    <div className="mt-6 relative">
+    <div className="mt-6">
       {tasks.map((task) => (
         <div key={task.id} className="flex items-center gap-3 mb-4">
           <input
             type="checkbox"
             checked={task.completed}
-            onChange={() => toggleTaskCompletion(task.id)}
-            className="w-4 h-4 accent-black"
+            disabled={loadingToggle === task.id}
+            onChange={() => onToggle(task.id)}
+            className="w-4 h-4 accent-black cursor-pointer"
           />
 
           <div className="flex justify-between items-center bg-[#FBF3D5] flex-1 rounded-xl px-4 py-3 shadow-sm">
             <span
-              className={`text-sm ${task.completed ? "line-through text-gray-500" : ""}`}
+              className={`text-sm ${
+                task.completed ? "line-through text-gray-500" : ""
+              }`}
             >
               {task.title}
             </span>
@@ -99,7 +95,7 @@ const confirmDelete = async () => {
                 onClick={() => navigate(`/updatetodo/${task.id}`)}
               />
               <FaTrash
-                className="text-red-500 cursor-pointer"
+                className="text-[#D8444C] cursor-pointer"
                 onClick={() => openDeleteModal(task.id)}
               />
             </div>
@@ -107,36 +103,60 @@ const confirmDelete = async () => {
         </div>
       ))}
 
-      {/* Confirmation Modal */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
-          <div className="bg-[#EDE7CF] max-w-md w-full rounded-[40px] p-8 text-center shadow-2xl">
-            <div className="flex justify-center mb-6">
-              <div className="w-24 h-24 rounded-full border-8 border-red-500 flex items-center justify-center">
-                <span className="text-red-500 text-4xl font-bold">✕</span>
-              </div>
+      {/* Confirm Delete Modal */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-[#E0E0C6] rounded-3xl p-8 max-w-xs w-full text-center shadow-lg">
+            <div className="mx-auto mb-5 flex items-center justify-center w-20 h-20 rounded-full text-[#D8444C] text-7xl">
+              <TiDeleteOutline />
             </div>
 
-            <h2 className="text-xl font-semibold mb-3">Are you sure?</h2>
-            <p className="text-gray-700 text-sm mb-8 leading-relaxed">
-              Do you really want to delete this task? This process cannot be
-              undone.
+            <h2 className="text-lg font-semibold mb-2">Delete Task?</h2>
+            <p className="text-sm text-gray-700 mb-6">
+              This action cannot be undone.
             </p>
 
             <div className="flex justify-center gap-6">
               <button
-                onClick={() => setShowModal(false)}
-                className="px-6 py-2 rounded-xl bg-gray-300 border border-black hover:opacity-90 transition"
+                onClick={closeConfirmModal}
+                className="px-6 py-2 rounded-xl bg-gray-300 hover:bg-gray-400 transition"
               >
                 Cancel
               </button>
+
               <button
                 onClick={confirmDelete}
-                className="px-6 py-2 rounded-xl bg-red-500 text-black border border-black hover:opacity-90 transition"
+                disabled={loadingDelete}
+                className="px-6 py-2 rounded-xl bg-[#D8444C] text-white hover:bg-red-600 transition"
               >
                 {loadingDelete ? "Deleting..." : "Delete"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Delete Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-[#E0E0C6] rounded-3xl p-8 max-w-xs w-full text-center shadow-lg">
+            <div className="mx-auto mb-5 flex items-center justify-center w-20 h-20 rounded-full text-green-600 text-7xl">
+              <TiTickOutline />
+            </div>
+
+            <h2 className="text-lg font-semibold mb-2">
+              Deleted Successfully
+            </h2>
+            <p className="text-sm text-gray-700 mb-6">
+              The task was deleted successfully.
+            </p>
+
+            <button
+              onClick={handleSuccessClose}
+              className="px-6 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition"
+            >
+              OK
+            </button>
           </div>
         </div>
       )}

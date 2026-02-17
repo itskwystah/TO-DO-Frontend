@@ -9,20 +9,21 @@ import logo from "@/assets/logo.png";
 
 // Components
 import InputField from "@/components/InputField";
-import TermsandCondition from "@/pages/auth/components/TermsandCondition"
+import TermsandCondition from "@/pages/auth/components/TermsandCondition";
 import { useAuthStore } from "@/store/auth/auth.store";
-//import TermsandCondition from "@/components/TermsandCondition";
 
 export default function Register() {
   const { loading, setRegister } = useAuthStore();
 
-    const [form, setForm] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
+  const [accepted, setAccepted] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   const navigate = useNavigate();
 
@@ -33,31 +34,23 @@ export default function Register() {
 
   const submitForm = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!accepted) {
+      alert("Please agree to the Terms and Conditions before registering.");
+      return;
+    }
+
     console.log("Form: ", form);
+
     const success = await setRegister(form);
     if (success) {
       navigate("/loginpage");
     }
   };
 
-  const [showTerms, setShowTerms] = useState(false);
-  const [accepted, setAccepted] = useState(false);
-
   const logPage = () => {
     navigate("/loginpage");
   };
-
-  // const handleRegister = (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (!accepted) {
-  //     alert("Please agree to the Terms and Conditions first.");
-  //     return;
-  //   }
-
-  //   // Continue your register logic here
-  //   navigate("/loginpage");
-  // };
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center rounded-3xl">
@@ -67,21 +60,18 @@ export default function Register() {
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
 
         <form onSubmit={submitForm} className="flex flex-col space-y-4">
-          <InputField 
-          label="Username"
-          name="name"
-           type="text" 
-          
-           placeholder="Username"   
-           onChange={handleChange}
-           />
-
+          <InputField
+            label="Username"
+            name="name"
+            type="text"
+            placeholder="Username"
+            onChange={handleChange}
+          />
 
           <InputField
             label="Email"
             name="email"
             type="email"
-          
             placeholder="Enter your email"
             onChange={handleChange}
           />
@@ -90,7 +80,6 @@ export default function Register() {
             label="Password"
             name="password"
             type="password"
-    
             placeholder="Enter your password"
             onChange={handleChange}
           />
@@ -118,7 +107,7 @@ export default function Register() {
                   onClick={() => setShowTerms(true)}
                   className="underline text-[#D6A99D] cursor-pointer"
                 >
-                  Terms and Condition
+                  Terms and Conditions
                 </span>
               </span>
             </label>
@@ -126,10 +115,12 @@ export default function Register() {
 
           <button
             type="submit"
-            disabled={loading}
-            className="bg-[#D6A99D] text-black py-2 rounded-xl shadow hover:opacity-90 transition w-full"
+            disabled={loading || !accepted}
+            className={`bg-[#D6A99D] text-black py-2 rounded-xl shadow transition w-full cursor-pointer ${
+              !accepted ? "opacity-50 " : "hover:opacity-90"
+            }`}
           >
-            {loading ? "Registering.." : "REGISTER"}
+            {loading ? "Registering..." : "REGISTER"}
           </button>
 
           <div className="flex justify-center text-[10px] space-x-1">

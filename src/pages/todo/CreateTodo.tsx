@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTodo as createTodoApi } from "@/api/todos/todos";
+import axios from "axios";
 
 // Assets
 import logo from "@/assets/Logo2.png";
-import axios from "axios";
+
+// Modal
+import StatusModal from "@/pages/todo/components/modals"; // path to your modal
 
 export default function CreateTodo() {
   const navigate = useNavigate();
@@ -15,6 +18,9 @@ export default function CreateTodo() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+
   const handleSubmit = async () => {
     if (!title.trim()) {
       setError("Title is required");
@@ -22,64 +28,64 @@ export default function CreateTodo() {
     }
 
     try {
-  setLoading(true);
-  setError("");
+      setLoading(true);
+      setError("");
 
-  const res = await createTodoApi(title, description);
-  console.log("Todo created:", res);
+      await createTodoApi(title, description);
 
-  // Navigate after success
-  navigate("/dashboardpage");
-} catch (err: unknown) {
-  // err is unknown, so we check if it's an AxiosError
-  if (axios.isAxiosError(err)) {
-    setError(err.response?.data?.message || "Error creating task");
-  } else if (err instanceof Error) {
-    setError(err.message);
-  } else {
-    setError("Error creating task");
-  }
-} finally {
-  setLoading(false);
-}
+      // Show "success-added" modal
+      setShowModal(true);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Error creating task");
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Error creating task");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    navigate("/dashboardpage"); // Navigate after closing modal
   };
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col rounded-3xl">
       <div className="w-375px h-812px bg-[#9CAFAA] rounded-[40px] px-6 py-6 flex flex-col ">
         {/* Header */}
-        <div className="flex flex-row justify-between py-2 px-4">
+        <div className="flex flex-row justify-between py-2 px-1">
           <img src={logo} alt="Logo" />
         </div>
 
         {/* Title */}
-        <div className="px-1 -mt-10">
+        <div className="px-1 -mt-20">
           <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
-          <span className="flex items-center px-1">
-            <span className="h-px w-80 bg-black"></span>
-          </span>
-          <div className="h-1px bg-black w-64 mt-2"></div>
+          <div className="h-px bg-black mt-1 w-full max-w-260px" />
         </div>
 
         {/* Form */}
         <div className="mt-10 flex flex-col gap-6 px-2">
           <div>
-            <label className="block text-sm mb-2">Title</label>
+            <label className="block text-sm -mt-8 mb-1">Title</label>
             <input
               type="text"
               placeholder="Title"
-              className="w-full bg-[#E8DFC8] rounded-xl px-4 py-2 border border-black focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="w-full bg-[#E8DFC8] rounded-xl px-4 py-2 border shadow-lg border-[#9CAFAA] focus:outline-none focus:ring-2 focus:ring-gray-500"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
           <div>
-            <label className="block text-sm mb-2">Description</label>
+            <label className="block text-sm mb-1">Description</label>
             <textarea
               rows={6}
               placeholder="Description"
-              className="w-full bg-[#E8DFC8] rounded-xl px-4 py-3 border border-black resize-none focus:ring-[#D6A99D]"
+              className="w-full bg-[#E8DFC8] rounded-xl px-4 py-3 border shadow-lg border-[#9CAFAA] focus:outline-none focus:ring-2 focus:ring-gray-500"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -89,23 +95,30 @@ export default function CreateTodo() {
         </div>
 
         {/* Bottom Buttons */}
-        <div className="mt-auto flex flex-col gap-3 px-2 ml-auto">
+        <div className="mt-5 flex flex-col gap-3 px-2 ml-auto ">
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-[#E5E5E5] px-6 py-2 rounded-xl border border-black shadow-md hover:opacity-90 transition"
+            className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-lg hover:opacity-60 transition cursor-pointer"
           >
             {loading ? "Saving..." : "+ ADD NEW TASK"}
           </button>
 
           <button
             onClick={() => navigate("/dashboardpage")}
-            className="bg-[#E5E5E5] px-6 py-2 rounded-xl border border-black shadow-md hover:opacity-90 transition"
+            className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-md hover:opacity-60 transition cursor-pointer"
           >
             &lt; BACK
           </button>
         </div>
       </div>
+
+      {/* Status Modal for "success-added" */}
+      <StatusModal
+        show={showModal}
+        type="success-added"
+        onClose={handleModalClose}
+      />
     </div>
   );
 }
