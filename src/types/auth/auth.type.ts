@@ -5,4 +5,5 @@ export type AuthStoreType = {
     setRegister: (data: Partial<AcctType>) => Promise<boolean>;
     setLogin: (data: Partial<AcctType>) => Promise<boolean>;
     logout: () => Promise<boolean>;
+    initializeAuth: () => Promise<void>;
 };

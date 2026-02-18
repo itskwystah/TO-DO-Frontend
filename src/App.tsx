@@ -1,6 +1,10 @@
 // Libraries
 import { Toaster } from "react-hot-toast";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import { useEffect } from "react";
+
+// Store
+import { useAuthStore } from "@/store/auth/auth.store";
 
 // Pages
 import LandingPage from "./pages/LandingPage";
@@ -23,6 +27,12 @@ function Home() {
 }
 
 export function App() {
+  const initializeAuth = useAuthStore((s) => s.initializeAuth);
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
   const router = createBrowserRouter([
     {
       path: "/",

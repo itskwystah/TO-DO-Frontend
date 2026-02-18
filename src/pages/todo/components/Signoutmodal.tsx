@@ -1,12 +1,19 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaTasks, FaClock, FaCheckCircle, FaSignOutAlt, FaTimes } from "react-icons/fa";
-import StatusModal from "@/pages/todo/components/modals"; // Import StatusModal
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  FaTasks,
+  FaClock,
+  FaCheckCircle,
+  FaSignOutAlt,
+  FaTimes,
+} from 'react-icons/fa';
+import { useAccountStore } from '@/store/account/account.store';
+import StatusModal from '@/pages/todo/components/modals'; // Import StatusModal
 
 interface SignOutModalProps {
   show: boolean;
   onClose: () => void;
-  onFilterChange: (filter: "all" | "pending" | "completed") => void;
+  onFilterChange: (filter: 'all' | 'pending' | 'completed') => void;
 }
 
 export default function SignOutModal({
@@ -16,12 +23,14 @@ export default function SignOutModal({
 }: SignOutModalProps) {
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
   const navigate = useNavigate();
+  const account = useAccountStore((s) => s.account);
+  const username = account?.name;
 
   // Confirm logout handler
   const handleLogoutConfirm = () => {
     setShowConfirmLogout(false);
     onClose(); // close menu
-    navigate("/"); // redirect to Landing page
+    navigate('/'); // redirect to Landing page
   };
 
   if (!show) return null;
@@ -30,19 +39,17 @@ export default function SignOutModal({
     <>
       <div className="fixed inset-0 flex flex-col rounded-3xl items-center justify-center z-50">
         <div className="bg-[#FBF3D5] rounded-2xl p-6 w-80 shadow-xl">
-
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Menu</h2>
+            <h2 className="text-lg font-bold">Hello, {username}</h2>
             <button onClick={onClose}>
               <FaTimes className="text-gray-600 hover:text-black" />
             </button>
           </div>
-
           <div className="flex flex-col gap-3">
             <button
               onClick={() => {
-                onFilterChange("all");
+                onFilterChange('all');
                 onClose();
               }}
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition"
@@ -53,7 +60,7 @@ export default function SignOutModal({
 
             <button
               onClick={() => {
-                onFilterChange("pending");
+                onFilterChange('pending');
                 onClose();
               }}
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition"
@@ -64,7 +71,7 @@ export default function SignOutModal({
 
             <button
               onClick={() => {
-                onFilterChange("completed");
+                onFilterChange('completed');
                 onClose();
               }}
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition"
