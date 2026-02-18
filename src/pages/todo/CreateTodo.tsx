@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createTodo as createTodoApi } from "@/api/todo/todo.api";
+import { createTodoApi as createTodoApi } from "@/api/todo/todo.api";
 import axios from "axios";
 
 // Assets

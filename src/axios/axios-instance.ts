@@ -1,15 +1,3 @@
-// import axios from "axios";
-// const axiosInstance = axios.create({
-//   baseURL: `${import.meta.env.VITE_API_URL}/api`,
-//   timeout: 300000,
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   withCredentials: true,
-// });
-
-// export default axiosInstance;
-
 import { useTokenStore } from "@/store/token/token.store";
 import axios, {
   AxiosError,
@@ -28,6 +16,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config) => {
   const token = useTokenStore.getState().accessToken;
+
+  console.log("Request Interceptor - Current Access Token:", token);
 
   // Attach the access token to the Authorization header when available.
   if (token) config.headers?.set("Authorization", `Bearer ${token}`);

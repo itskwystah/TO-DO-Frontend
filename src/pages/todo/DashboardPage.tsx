@@ -2,52 +2,26 @@ import logo from "@/assets/Logo2.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import axiosInstance from "@/axios/axios-instance";
-import InputFieldList, { type Task } from "@/components/InputFieldList";
+import { useTodoStore } from "@/store/todo/todo.store";
+import InputFieldList from "@/components/InputFieldList";
 import SignOutModal from "@/pages/todo/components/Signoutmodal";
 
 import { FaBars } from "react-icons/fa";
 
-interface TodoResponse {
-  data: {
-    _id: string;
-    title: string;
-    description?: string;
-    completed: boolean;
-  }[];
-}
-
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(false);
+
+  const { todos, loading, getTodos, updateTodo } = useTodoStore();
+
   const [showMenu, setShowMenu] = useState(false);
-  const [filter, setFilter] = useState<"all" | "pending" | "completed">("all");
+  const [filter, setFilter] =
+    useState<"all" | "pending" | "completed">("all");
   const [loadingToggle, setLoadingToggle] = useState<string | null>(null);
 
   // ---------------- FETCH TASKS ----------------
-  const fetchTasks = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get<TodoResponse>("/todos");
-
-      const mappedTasks: Task[] = res.data.data.map((task) => ({
-        id: task._id,
-        title: task.title,
-        description: task.description,
-        completed: Boolean(task.completed),
-      }));
-
-      setTasks(mappedTasks);
-    } catch (err) {
-      console.error("Error fetching tasks:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchTasks();
+    getTodos();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ---------------- NAVIGATION ----------------
@@ -55,7 +29,7 @@ export default function DashboardPage() {
 
   // ---------------- TOGGLE COMPLETED ----------------
   const toggleTask = async (taskId: string) => {
-    const task = tasks.find((t) => t.id === taskId);
+    const task = todos.find((t) => t._id === taskId);
     if (!task) return;
 
     const newCompleted = !task.completed;
@@ -63,35 +37,24 @@ export default function DashboardPage() {
     setLoadingToggle(taskId);
 
     // Optimistic UI update
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === taskId ? { ...t, completed: newCompleted } : t
-      )
-    );
+    await updateTodo(taskId, { completed: newCompleted });
 
-    try {
-      // Send put to backend with completed field
-      await axiosInstance.put(`/todos/${taskId}`, { completed: newCompleted });
-    } catch (err) {
-      console.error("Error updating task:", err);
-
-      // Rollback on failure
-      setTasks((prev) =>
-        prev.map((t) =>
-          t.id === taskId ? { ...t, completed: task.completed } : t
-        )
-      );
-    } finally {
-      setLoadingToggle(null);
-    }
+    setLoadingToggle(null);
   };
 
   // ---------------- FILTER ----------------
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === "pending") return !task.completed;
-    if (filter === "completed") return task.completed;
-    return true;
-  });
+  const filteredTasks = todos
+    .filter((task) => {
+      if (filter === "pending") return !task.completed;
+      if (filter === "completed") return task.completed;
+      return true;
+    })
+    .map((task) => ({
+      id: task._id,
+      title: task.title,
+      description: task.description,
+      completed: task.completed,
+    }));
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col rounded-3xl">
@@ -118,7 +81,7 @@ export default function DashboardPage() {
       <div className="px-8 mt-6">
         <button
           onClick={createTodo}
-          className="w-full  text-black py-3 rounded-xl border border-[#E8DFC8] shadow-lg hover:opacity-90 transition cursor-pointer"
+          className="w-full text-black py-3 rounded-xl border border-[#E8DFC8] shadow-lg hover:opacity-90 transition cursor-pointer"
         >
           + ADD NEW TASK
         </button>
