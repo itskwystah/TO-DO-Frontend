@@ -1,6 +1,6 @@
 // Libraries
 import { useState, type ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Assets
 import logo from "@/assets/logo.png";
@@ -8,14 +8,18 @@ import logo from "@/assets/logo.png";
 // Icons
 import { IoIosLock } from "react-icons/io";
 
-export default function ForgotPassword() {
-  const navigate = useNavigate();
+// API
+import { verifyForgotPasswordOtpApi, resendForgotPasswordOtpApi } from "@/api/auth/auth.api";
 
-  const createnewPass = () => {
-    navigate("/createnewpassword");
-  };
+export default function VerifyCode() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const email = (location.state as { email: string })?.email || "";
 
   const [code, setCode] = useState(new Array(6).fill(""));
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
@@ -24,11 +28,56 @@ export default function ForgotPassword() {
       newCode[index] = value;
       setCode(newCode);
 
-      // Automatically focus next input
+      // Focus next input
       if (value && index < 5) {
         const nextInput = document.getElementById(`code-${index + 1}`);
-        nextInput!.focus();
+        nextInput?.focus();
       }
+    }
+  };
+
+  const handleVerify = async () => {
+    const otp = code.join("");
+    if (otp.length !== 6) {
+      setError("Please enter the 6-digit code");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      await verifyForgotPasswordOtpApi(email, otp);
+
+      // Navigate to create new password page
+      navigate("/createnewpassword", { state: { email, otp } });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to verify OTP");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    try {
+      setResendLoading(true);
+      setError("");
+
+      await resendForgotPasswordOtpApi(email);
+
+      alert("OTP resent successfully!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to resend OTP");
+      }
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -41,22 +90,14 @@ export default function ForgotPassword() {
 
       {/* Verification Card */}
       <div className="bg-[#FEF9E7] rounded-2xl w-80 p-6 flex flex-col items-center">
-        {/* Lock Icon */}
         <div className="text-gray-600 mb-2">
-          <div><IoIosLock className="w-12 h-12 mt-0 mb-5"/></div>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 11c-1.105 0-2 .895-2 2v2h4v-2c0-1.105-.895-2-2-2zm0-4a4 4 0 014 4v2H8v-2a4 4 0 014-4z"
-            />
-         
+          <IoIosLock className="w-12 h-12 mt-0 mb-5" />
         </div>
 
-        <p className="text-gray-700 font-medium mb-4">Verification Code</p>
+        <p className="text-gray-700 font-medium mb-4">Enter the 6-digit code sent to your email</p>
 
         {/* 6-digit code inputs */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-4">
           {code.map((digit, index) => (
             <input
               key={index}
@@ -70,18 +111,27 @@ export default function ForgotPassword() {
           ))}
         </div>
 
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
         {/* Verify Button */}
-        <button 
-        type="button"
-        onClick={createnewPass}
-        className="bg-[#D3B7A2] w-full py-2 rounded text-white font-medium mb-2">
-          Verify
+        <button
+          type="button"
+          onClick={handleVerify}
+          disabled={loading}
+          className="bg-[#D3B7A2] w-full py-2 rounded text-white font-medium mb-2 hover:opacity-80 transition"
+        >
+          {loading ? "Verifying..." : "Verify"}
         </button>
 
         {/* Resend */}
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-500 mt-2">
           Didn’t receive the code?{" "}
-          <span className="underline text-red-400 cursor-pointer">Resend</span>
+          <span
+            className="underline text-red-400 cursor-pointer"
+            onClick={handleResend}
+          >
+            {resendLoading ? "Sending..." : "Resend"}
+          </span>
         </p>
       </div>
     </div>

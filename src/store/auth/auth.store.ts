@@ -8,6 +8,8 @@ import { create } from 'zustand';
 
 export const useAuthStore = create<AuthStoreType>((set) => ({
   loading: false,
+
+  // Registration function that sets token and account data
   setRegister: async (data) => {
     set({
       loading: true,
@@ -15,7 +17,7 @@ export const useAuthStore = create<AuthStoreType>((set) => ({
     try {
       const response = await registerApi(data);
       console.log('Response: ', response);
-      useTokenStore.getState().setToken(response.accessToken);
+      useTokenStore.getState().setToken(response.accessToken ?? null);
       await useAccountStore.getState().getAccount();
       toast.success(response.message);
       return true;
@@ -29,12 +31,14 @@ export const useAuthStore = create<AuthStoreType>((set) => ({
       });
     }
   },
+
+  // Login function that sets token and account data
   setLogin: async (data) => {
     set({ loading: true });
     try {
       const response = await loginApi(data);
       //console.log("login:", data);
-      useTokenStore.getState().setToken(response.accessToken);
+      useTokenStore.getState().setToken(response.accessToken ?? null);
       await useAccountStore.getState().getAccount();
       toast.success(response.message);
       return true;
@@ -48,6 +52,8 @@ export const useAuthStore = create<AuthStoreType>((set) => ({
       });
     }
   },
+
+  // Logout function that clears token and account data
   logout: async () => {
     set({ loading: true });
     try {
@@ -64,6 +70,8 @@ export const useAuthStore = create<AuthStoreType>((set) => ({
       set({ loading: false });
     }
   },
+
+  // Initialize
   initializeAuth: async () => {
     set({ loading: true });
     try {
