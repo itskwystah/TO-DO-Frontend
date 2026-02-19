@@ -1,6 +1,7 @@
 // Libraries
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 // Assets
 import logo from "@/assets/logo.png";
@@ -51,8 +52,13 @@ export default function CreateNewPassword() {
       // Call backend API to reset password
       await resetPasswordApi(email, otp, password);
 
-      alert("Password reset successfully!");
-      navigate("/loginpage", { replace: true }); // Redirect to login page
+      // Show toast for success
+      toast.success("Reset password successfully", { duration: 2500 });
+
+      // Delay navigation so the toast is visible
+      setTimeout(() => {
+        navigate("/loginpage", { replace: true });
+      }, 2500);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -66,6 +72,9 @@ export default function CreateNewPassword() {
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center">
+      {/* Toast container */}
+      <Toaster position="top-center" />
+
       <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
 
       <div className="bg-[#FBF3D5] p-8 rounded-2xl shadow-md w-80 flex flex-col justify-center items-center">
