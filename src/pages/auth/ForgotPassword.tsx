@@ -49,16 +49,16 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="bg-[#9CAFAA] min-h-screen flex-col flex justify-center items-center rounded-3xl">
+   <div className="bg-[#9CAFAA] min-h-screen flex-col flex justify-center items-center rounded-3xl">
       <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
 
       <div className="bg-[#FBF3D5] p-8 rounded-2xl shadow-md w-80 flex flex-col justify-center items-center">
         <div>
           <IoIosLock className="w-12 h-12 mt-0 mb-5" />
         </div>
-        <div className="flex items-center w-full mb-4">
+        <div className="flex items-center w-full mb-4 -mt-5">
           <div className="h-px flex-1 bg-linear-to-r from-transparent to-gray-300"></div>
-          <div className="shrink-0 px-4 text-gray-900">
+          <div className="shrink-0 px-4  text-gray-900">
             Forgot your password
           </div>
           <span className="h-px flex-1 bg-linear-to-l from-transparent to-gray-300"></span>

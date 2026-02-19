@@ -82,14 +82,13 @@ export default function VerifyCode() {
   };
 
   return (
-    <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center">
-      {/* Logo */}
-      <div className="bg-[#FEF9E7] w-24 h-24 rounded-full flex items-center justify-center mb-6">
-        <img src={logo} alt="Logo" className="w-16 h-16" />
+    <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center rounded-3xl">
+      <div >
+        <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
       </div>
 
       {/* Verification Card */}
-      <div className="bg-[#FEF9E7] rounded-2xl w-80 p-6 flex flex-col items-center">
+      <div className="bg-[#FBF3D5] rounded-2xl w-80 p-6 flex flex-col items-center">
         <div className="text-gray-600 mb-2">
           <IoIosLock className="w-12 h-12 mt-0 mb-5" />
         </div>
@@ -118,7 +117,7 @@ export default function VerifyCode() {
           type="button"
           onClick={handleVerify}
           disabled={loading}
-          className="bg-[#D3B7A2] w-full py-2 rounded text-white font-medium mb-2 hover:opacity-80 transition"
+          className="bg-[#D6A99D] text-black py-2 rounded-3xl shadow hover:opacity-90 transition px-4 w-full flex items-center justify-center gap-2"
         >
           {loading ? "Verifying..." : "Verify"}
         </button>
@@ -127,7 +126,7 @@ export default function VerifyCode() {
         <p className="text-xs text-gray-500 mt-2">
           Didn’t receive the code?{" "}
           <span
-            className="underline text-red-400 cursor-pointer"
+            className="underline text-[#D6A99D] cursor-pointer"
             onClick={handleResend}
           >
             {resendLoading ? "Sending..." : "Resend"}
