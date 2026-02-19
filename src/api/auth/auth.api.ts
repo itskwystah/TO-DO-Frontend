@@ -3,77 +3,75 @@
 import axiosInstance from "@/axios/axios-instance";
 import type { AcctType } from "@/types/account/account.type";
 
-/* ======================================================
-   Types
-====================================================== */
-
+// Types
 interface MessageResponse {
   message: string;
 }
-
 
 interface AuthResponse extends MessageResponse {
   accessToken?: string;
 }
 
-/* ======================================================
-   Authentication APIs
-====================================================== */
+// Authentication APIs
 
 export const registerApi = async (
-  data: Partial<AcctType>
+  data: Partial<AcctType>,
 ): Promise<AuthResponse> => {
   const { data: response } = await axiosInstance.post<AuthResponse>(
     "/auth/register",
-    data
+    data,
   );
   return response;
 };
 
 export const loginApi = async (
-  data: Partial<AcctType>
+  data: Partial<AcctType>,
 ): Promise<AuthResponse> => {
   const { data: response } = await axiosInstance.post<AuthResponse>(
     "/auth/login/",
-    data
+    data,
   );
   return response;
 };
 
 export const logoutApi = async (): Promise<MessageResponse> => {
-  const { data: response } = await axiosInstance.post<MessageResponse>(
-    "/auth/logout"
-  );
+  const { data: response } =
+    await axiosInstance.post<MessageResponse>("/auth/logout");
   return response;
 };
 
-/* ======================================================
-   Forgot Password Flow
-====================================================== */
+// Flow of Forgot Password:
 
 // Send OTP
-export const sendForgotPasswordOtpApi = async (email: string): Promise<MessageResponse> => {
+export const sendForgotPasswordOtpApi = async (
+  email: string,
+): Promise<MessageResponse> => {
   const { data } = await axiosInstance.post<MessageResponse>(
     "/auth/forgot-password/send-otp",
-    { email }
+    { email },
   );
   return data;
 };
 
 // Resend OTP
-export const resendForgotPasswordOtpApi = async (email: string): Promise<MessageResponse> => {
+export const resendForgotPasswordOtpApi = async (
+  email: string,
+): Promise<MessageResponse> => {
   const { data } = await axiosInstance.post<MessageResponse>(
     "/auth/forgot-password/resend-otp",
-    { email }
+    { email },
   );
   return data;
 };
 
 // Verify OTP
-export const verifyForgotPasswordOtpApi = async (email: string, otp: string): Promise<MessageResponse> => {
+export const verifyForgotPasswordOtpApi = async (
+  email: string,
+  otp: string,
+): Promise<MessageResponse> => {
   const { data } = await axiosInstance.post<MessageResponse>(
     "/auth/forgot-password/verify-otp",
-    { email, otp }
+    { email, otp },
   );
   return data;
 };
@@ -82,12 +80,11 @@ export const verifyForgotPasswordOtpApi = async (email: string, otp: string): Pr
 export const resetPasswordApi = async (
   email: string,
   otp: string,
-  newPassword: string
+  newPassword: string,
 ): Promise<MessageResponse> => {
   const { data } = await axiosInstance.post<MessageResponse>(
     "/auth/forgot-password/reset",
-    { email, otp, newPassword } // must match backend field
+    { email, otp, newPassword }, // must match backend field
   );
   return data;
 };
-

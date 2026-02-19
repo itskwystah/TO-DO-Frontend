@@ -2,16 +2,11 @@ import { useState } from "react";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
 import { TfiEmail } from "react-icons/tfi";
 
-interface InputFieldProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
 
-export default function InputField({
-  label,
-  type,
-  ...props
-}: InputFieldProps) {
+export default function InputField({ label, type, ...props }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = type === "password";
@@ -24,7 +19,7 @@ export default function InputField({
       <div className="relative">
         <input
           type={isPassword ? (showPassword ? "text" : "password") : type}
-          {...props}  
+          {...props}
           className={`w-full border border-[#D6A99D] px-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-[#D6A99D] ${
             isPassword || isEmail ? "pr-10" : ""
           }`}

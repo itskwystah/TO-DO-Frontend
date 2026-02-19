@@ -1,10 +1,10 @@
-import { loginApi, logoutApi, registerApi } from '@/api/auth/auth.api';
-import type { AuthStoreType } from '@/types/auth/auth.type';
-import { useTokenStore } from '@/store/token/token.store';
-import { useAccountStore } from '@/store/account/account.store';
-import { showError } from '@/utils/error/error.util';
-import toast from 'react-hot-toast';
-import { create } from 'zustand';
+import { loginApi, logoutApi, registerApi } from "@/api/auth/auth.api";
+import type { AuthStoreType } from "@/types/auth/auth.type";
+import { useTokenStore } from "@/store/token/token.store";
+import { useAccountStore } from "@/store/account/account.store";
+import { showError } from "@/utils/error/error.util";
+import toast from "react-hot-toast";
+import { create } from "zustand";
 
 export const useAuthStore = create<AuthStoreType>((set) => ({
   loading: false,
@@ -16,7 +16,7 @@ export const useAuthStore = create<AuthStoreType>((set) => ({
     });
     try {
       const response = await registerApi(data);
-      console.log('Response: ', response);
+      console.log("Response: ", response);
       useTokenStore.getState().setToken(response.accessToken ?? null);
       await useAccountStore.getState().getAccount();
       toast.success(response.message);
@@ -77,13 +77,13 @@ export const useAuthStore = create<AuthStoreType>((set) => ({
     try {
       // Initialize token store first (checks for existing token)
       const tokenInitialized = await useTokenStore.getState().init();
-      
+
       // If token exists, fetch the account
       if (tokenInitialized) {
         await useAccountStore.getState().getAccount();
       }
     } catch (error) {
-      console.error('Auth initialization failed:', error);
+      console.error("Auth initialization failed:", error);
     } finally {
       set({ loading: false });
     }

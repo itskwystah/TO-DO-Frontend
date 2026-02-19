@@ -9,7 +9,10 @@ import logo from "@/assets/logo.png";
 import { IoIosLock } from "react-icons/io";
 
 // API
-import { verifyForgotPasswordOtpApi, resendForgotPasswordOtpApi } from "@/api/auth/auth.api";
+import {
+  verifyForgotPasswordOtpApi,
+  resendForgotPasswordOtpApi,
+} from "@/api/auth/auth.api";
 
 export default function VerifyCode() {
   const navigate = useNavigate();
@@ -83,7 +86,7 @@ export default function VerifyCode() {
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center rounded-3xl">
-      <div >
+      <div>
         <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
       </div>
 
@@ -93,7 +96,9 @@ export default function VerifyCode() {
           <IoIosLock className="w-12 h-12 mt-0 mb-5" />
         </div>
 
-        <p className="text-gray-700 font-medium mb-4">Enter the 6-digit code sent to your email</p>
+        <p className="text-gray-700 font-medium mb-4">
+          Enter the 6-digit code sent to your email
+        </p>
 
         {/* 6-digit code inputs */}
         <div className="flex gap-2 mb-4">

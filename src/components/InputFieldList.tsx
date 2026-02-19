@@ -9,6 +9,7 @@ export interface Task {
   title: string;
   description?: string;
   completed: boolean;
+  createdAt: string;
 }
 
 interface InputFieldListProps {
@@ -81,15 +82,32 @@ const InputFieldList = ({
           />
 
           <div className="flex justify-between items-center bg-[#FBF3D5] flex-1 rounded-xl px-4 py-3 shadow-sm">
-            <span
-              className={`text-sm ${
-                task.completed ? "line-through text-gray-500" : ""
-              }`}
-            >
-              {task.title}
-            </span>
+            {/* Title */}
+            <div className="flex-1 min-w-0">
+              <span
+                className={`text-sm block ${
+                  task.completed ? "line-through text-gray-500" : ""
+                }`}
+              >
+                {task.title}
+              </span>
 
-            <div className="flex gap-3">
+              {/* Task description */}
+              {task.description && (
+                <p className={`text-[10px] text-gray-600 mt-0.5 `}>
+                  {task.description}
+                </p>
+              )}
+              {/* time and date */}
+              {task.createdAt && (
+                <p className="text-[8px] text-gray-400 mt-1">
+                  {new Date(task.createdAt).toLocaleString()}
+                </p>
+              )}
+            </div>
+
+            {/* Edit & Delete Buttons */}
+            <div className="flex gap-3 ml-4">
               <FaRegEdit
                 className="text-gray-500 cursor-pointer"
                 onClick={() => navigate(`/updatetodo/${task.id}`)}
@@ -144,9 +162,7 @@ const InputFieldList = ({
               <TiTickOutline />
             </div>
 
-            <h2 className="text-lg font-semibold mb-2">
-              Deleted Successfully
-            </h2>
+            <h2 className="text-lg font-semibold mb-2">Deleted Successfully</h2>
             <p className="text-sm text-gray-700 mb-6">
               The task was deleted successfully.
             </p>

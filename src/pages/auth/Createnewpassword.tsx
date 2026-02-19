@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// Assets 
+// Assets
 import logo from "@/assets/logo.png";
 
 // Components
@@ -18,7 +18,8 @@ import { resetPasswordApi } from "@/api/auth/auth.api";
 export default function CreateNewPassword() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { email, otp } = (location.state as { email: string; otp: string }) || {};
+  const { email, otp } =
+    (location.state as { email: string; otp: string }) || {};
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -67,12 +68,14 @@ export default function CreateNewPassword() {
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center">
       <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
 
-      <div className="bg-[#FBF3D5] p-8 rounded-2xl shadow-md w-80 flex flex-col justify-center items-center">      
+      <div className="bg-[#FBF3D5] p-8 rounded-2xl shadow-md w-80 flex flex-col justify-center items-center">
         <IoIosLock className="w-12 h-12 mb-5" />
 
         <div className="flex items-center mb-4 w-full">
           <div className="h-px flex-1 bg-gray-300"></div>
-          <div className="shrink-0 px-4 text-gray-900 font-medium">Create New Password</div>
+          <div className="shrink-0 px-4 text-gray-900 font-medium">
+            Create New Password
+          </div>
           <div className="h-px flex-1 bg-gray-300"></div>
         </div>
 

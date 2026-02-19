@@ -2,38 +2,31 @@
 import axiosInstance from "@/axios/axios-instance";
 import type { Todo, UpdateTodoPayload } from "@/types/todo/todostore.type";
 
-
-// ========================
-// CREATE TODO
-// ========================
-export const createTodoApi = async (
-  title: string,
-  description: string
-) => {
+// Create a new todo
+export const createTodoApi = async (title: string, description: string) => {
   const response = await axiosInstance.post("/todos", { title, description });
   return response.data; // { message, todo }
 };
 
-// ========================
-// GET ALL TODOS
-// ========================
+// Get all todos
 export const getTodosApi = async () => {
   const response = await axiosInstance.get("/todos");
   return response.data; // { message, todos }
 };
 
-// ========================
-// UPDATE TODO
-// ========================
-export const updateTodoApi = async (id: string, data: UpdateTodoPayload): Promise<{ message: string; data: Todo }> => {
-  const res = await axiosInstance.put<{ message: string; data: Todo }>(`/todos/${id}`, data);
+// Upadate a todo
+export const updateTodoApi = async (
+  id: string,
+  data: UpdateTodoPayload,
+): Promise<{ message: string; data: Todo }> => {
+  const res = await axiosInstance.put<{ message: string; data: Todo }>(
+    `/todos/${id}`,
+    data,
+  );
   return res.data;
 };
 
-
-// ========================
-// DELETE TODO
-// ========================
+// Delete a todo
 export const deleteTodoApi = async (id: string) => {
   const response = await axiosInstance.delete(`/todos/${id}`);
   return response.data; // { message }

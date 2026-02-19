@@ -54,6 +54,7 @@ export default function DashboardPage() {
       title: task.title,
       description: task.description,
       completed: task.completed,
+      createdAt: task.createdAt,
     }));
 
   return (

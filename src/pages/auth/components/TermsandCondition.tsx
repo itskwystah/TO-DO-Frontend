@@ -43,8 +43,8 @@ const TermsAndCondition: React.FC<TermsAndConditionProps> = ({
           </p>
           <p>
             The application may be updated or temporarily unavailable. It is
-            provided “as is,” and the developer is not responsible for lost
-            data or missed tasks.
+            provided “as is,” and the developer is not responsible for lost data
+            or missed tasks.
           </p>
         </div>
 

@@ -49,7 +49,7 @@ export default function ForgotPassword() {
   };
 
   return (
-   <div className="bg-[#9CAFAA] min-h-screen flex-col flex justify-center items-center rounded-3xl">
+    <div className="bg-[#9CAFAA] min-h-screen flex-col flex justify-center items-center rounded-3xl">
       <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
 
       <div className="bg-[#FBF3D5] p-8 rounded-2xl shadow-md w-80 flex flex-col justify-center items-center">
