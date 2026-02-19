@@ -14,6 +14,9 @@ import {
   resendForgotPasswordOtpApi,
 } from "@/api/auth/auth.api";
 
+// Icons
+import { FiSend } from "react-icons/fi";
+
 export default function VerifyCode() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -96,7 +99,7 @@ export default function VerifyCode() {
           <IoIosLock className="w-12 h-12 mt-0 mb-5" />
         </div>
 
-        <p className="text-gray-700 font-medium mb-4">
+        <p className="text-gray-700 text-[14px] font-medium mb-7 -mt-5">
           Enter the 6-digit code sent to your email
         </p>
 
@@ -110,7 +113,7 @@ export default function VerifyCode() {
               maxLength={1}
               value={digit}
               onChange={(e) => handleChange(e, index)}
-              className="w-10 h-10 text-center rounded border border-[#F2E3D5] focus:outline-none focus:ring-2 focus:ring-[#D3B7A2]"
+              className="w-10 h-10 text-center rounded border border-[#F2E3D5] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#D3B7A2] mb-4"
             />
           ))}
         </div>
@@ -124,6 +127,7 @@ export default function VerifyCode() {
           disabled={loading}
           className="bg-[#D6A99D] text-black py-2 rounded-3xl shadow hover:opacity-90 transition px-4 w-full flex items-center justify-center gap-2"
         >
+          <FiSend />
           {loading ? "Verifying..." : "Verify"}
         </button>
 

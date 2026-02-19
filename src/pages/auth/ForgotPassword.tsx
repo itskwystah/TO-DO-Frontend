@@ -1,9 +1,12 @@
 // Libraries
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { sendForgotPasswordOtpApi } from "@/api/auth/auth.api"; // create this API function
+
+// Icons
 import { FiSend } from "react-icons/fi";
 import { IoIosLock } from "react-icons/io";
-import { sendForgotPasswordOtpApi } from "@/api/auth/auth.api"; // create this API function
+
 
 // Assets
 import logo from "@/assets/logo.png";
@@ -56,9 +59,10 @@ export default function ForgotPassword() {
         <div>
           <IoIosLock className="w-12 h-12 mt-0 mb-5" />
         </div>
+
         <div className="flex items-center w-full mb-4 -mt-5">
           <div className="h-px flex-1 bg-linear-to-r from-transparent to-gray-300"></div>
-          <div className="shrink-0 px-4  text-gray-900">
+          <div className="shrink-0 px-4 text-gray-700 text-[14px] font-medium">
             Forgot your password
           </div>
           <span className="h-px flex-1 bg-linear-to-l from-transparent to-gray-300"></span>

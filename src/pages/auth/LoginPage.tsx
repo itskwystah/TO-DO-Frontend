@@ -9,7 +9,7 @@ import type { AcctType } from "@/types/account/account.type";
 
 // Components
 import InputField from "@/components/InputField";
-import StatusModal from "@/pages/todo/components/modals"; // Import modal
+import StatusModal from "@/pages/todo/modals/modals"; // Import modal
 
 export default function LoginPage() {
   const loading = useAuthStore((state) => state.loading);

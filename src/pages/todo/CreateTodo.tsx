@@ -1,3 +1,4 @@
+// Libraries
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTodoApi as createTodoApi } from "@/api/todo/todo.api";
@@ -7,7 +8,7 @@ import axios from "axios";
 import logo from "@/assets/Logo2.png";
 
 // Modal
-import StatusModal from "@/pages/todo/components/modals"; // path to your modal
+import StatusModal from "@/pages/todo/modals/modals"; // path to your modal
 
 export default function CreateTodo() {
   const navigate = useNavigate();
@@ -101,14 +102,14 @@ export default function CreateTodo() {
             disabled={loading}
             className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-lg hover:opacity-60 transition cursor-pointer"
           >
-            {loading ? "Saving..." : "+ ADD NEW TASK"}
+            {loading ? "Saving..." : " ADD NEW TASK"}
           </button>
 
           <button
             onClick={() => navigate("/dashboardpage")}
             className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-md hover:opacity-60 transition cursor-pointer"
           >
-            &lt; BACK
+             BACK
           </button>
         </div>
       </div>

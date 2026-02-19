@@ -8,7 +8,7 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import { useAccountStore } from '@/store/account/account.store';
-import StatusModal from '@/pages/todo/components/modals'; // Import StatusModal
+import StatusModal from '@/pages/todo/modals/modals'; // Import StatusModal
 
 interface SignOutModalProps {
   show: boolean;
@@ -55,7 +55,7 @@ export default function SignOutModal({
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition"
             >
               <FaTasks className="text-blue-500" />
-              View All Todos
+              View All Tasks
             </button>
 
             <button
@@ -66,7 +66,7 @@ export default function SignOutModal({
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition"
             >
               <FaClock className="text-yellow-500" />
-              Pending Todos
+              Pending Tasks
             </button>
 
             <button
@@ -77,7 +77,7 @@ export default function SignOutModal({
               className="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition"
             >
               <FaCheckCircle className="text-green-500" />
-              Completed Todos
+              Completed Tasks
             </button>
 
             <button

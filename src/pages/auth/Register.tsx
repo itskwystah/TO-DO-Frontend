@@ -1,16 +1,16 @@
 // Libraries
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/auth/auth.store";
 
 // Assets
 import logo from "@/assets/logo.png";
 
 // Components
 import InputField from "@/components/InputField";
-import TermsandCondition from "@/pages/auth/components/TermsandCondition";
-import { useAuthStore } from "@/store/auth/auth.store";
+import TermsandCondition from "@/pages/auth/modals/TermsandCondition";
+
 
 export default function Register() {
   const { loading, setRegister } = useAuthStore();

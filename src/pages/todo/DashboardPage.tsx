@@ -1,12 +1,19 @@
-import logo from "@/assets/Logo2.png";
+// Libaries
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useTodoStore } from "@/store/todo/todo.store";
-import InputFieldList from "@/components/InputFieldList";
-import SignOutModal from "@/pages/todo/components/Signoutmodal";
 
+// Components
+import InputFieldList from "@/components/InputFieldList";
+
+// Modals
+import SignOutModal from "@/pages/todo/modals/Signoutmodal";
+
+// Icons
 import { FaBars } from "react-icons/fa";
+
+// Assets
+import logo from "@/assets/Logo2.png";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -18,16 +25,16 @@ export default function DashboardPage() {
     useState<"all" | "pending" | "completed">("all");
   const [loadingToggle, setLoadingToggle] = useState<string | null>(null);
 
-  // ---------------- FETCH TASKS ----------------
+  // Fetch Task
   useEffect(() => {
     getTodos();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ---------------- NAVIGATION ----------------
+  // Navigation
   const createTodo = () => navigate("/createtodo");
 
-  // ---------------- TOGGLE COMPLETED ----------------
+  // Toogle
   const toggleTask = async (taskId: string) => {
     const task = todos.find((t) => t._id === taskId);
     if (!task) return;
@@ -42,7 +49,7 @@ export default function DashboardPage() {
     setLoadingToggle(null);
   };
 
-  // ---------------- FILTER ----------------
+  //Filter
   const filteredTasks = todos
     .filter((task) => {
       if (filter === "pending") return !task.completed;
@@ -84,7 +91,7 @@ export default function DashboardPage() {
           onClick={createTodo}
           className="w-full text-black py-3 rounded-xl border border-[#E8DFC8] shadow-lg hover:opacity-90 transition cursor-pointer"
         >
-          + ADD NEW TASK
+           ADD NEW TASK
         </button>
       </div>
 

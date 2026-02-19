@@ -1,10 +1,16 @@
-import { loginApi, logoutApi, registerApi } from "@/api/auth/auth.api";
+// Libraries
+import { create } from "zustand";
+// Types
 import type { AuthStoreType } from "@/types/auth/auth.type";
+// Stores
 import { useTokenStore } from "@/store/token/token.store";
 import { useAccountStore } from "@/store/account/account.store";
+// Utils
 import { showError } from "@/utils/error/error.util";
+// Api's
 import toast from "react-hot-toast";
-import { create } from "zustand";
+import { loginApi, logoutApi, registerApi } from "@/api/auth/auth.api";
+
 
 export const useAuthStore = create<AuthStoreType>((set) => ({
   loading: false,

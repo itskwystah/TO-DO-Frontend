@@ -59,8 +59,8 @@ const modalConfig: Record<
   },
   "update-success": {
     icon: <TiInfoLargeOutline />,
-    iconColor: "text-blue-600",
-    title: "Update Successful",
+    iconColor: "text-green-600",
+    title: "Update Successfully",
     description: "Your task has been updated.",
     showCancel: false,
   },

@@ -1,5 +1,3 @@
-// src/types/todo/todostore.type.ts
-
 export interface Todo {
   createdAt: string;
   _id: string;

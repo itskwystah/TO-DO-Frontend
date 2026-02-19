@@ -1,8 +1,11 @@
+// Libraries
 import { useState } from "react";
-import { FaRegEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "@/axios/axios-instance";
+
+// Icons
 import { TiDeleteOutline, TiTickOutline } from "react-icons/ti";
+import { FaRegEdit, FaTrash } from "react-icons/fa";
 
 export interface Task {
   id: string;

@@ -1,10 +1,14 @@
+// Libraries
 import { create } from "zustand";
+// Types
 import type {
   TodoStoreType,
   Todo,
   UpdateTodoPayload,
 } from "@/types/todo/todostore.type";
+// Utils
 import { showError } from "@/utils/error/error.util";
+// Api's
 import {
   createTodoApi,
   deleteTodoApi,

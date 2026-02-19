@@ -1,4 +1,4 @@
-// src/pages/UpdateTodo.tsx
+// Libraries
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -8,7 +8,7 @@ import axiosInstance from "@/axios/axios-instance"; // Your centralized Axios in
 import logo from "@/assets/Logo2.png";
 
 // Modal
-import StatusModal from "@/pages/todo/components/modals"; // adjust path if needed
+import StatusModal from "@/pages/todo/modals/modals"; // adjust path if needed
 
 interface Todo {
   id: string;
@@ -174,7 +174,7 @@ export default function UpdateTodo() {
             onClick={() => navigate("/dashboardpage")}
             className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-lg hover:opacity-90 transition"
           >
-            &lt; BACK
+            BACK
           </button>
         </div>
       </div>

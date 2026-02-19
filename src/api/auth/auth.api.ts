@@ -1,5 +1,3 @@
-// src/api/auth/auth.api.ts
-
 import axiosInstance from "@/axios/axios-instance";
 import type { AcctType } from "@/types/account/account.type";
 
@@ -13,7 +11,6 @@ interface AuthResponse extends MessageResponse {
 }
 
 // Authentication APIs
-
 export const registerApi = async (
   data: Partial<AcctType>,
 ): Promise<AuthResponse> => {

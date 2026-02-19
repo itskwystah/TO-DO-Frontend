@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 export default function LandingPage() {
-  //const handleGetStarted = () => {
-  // alert("Welcome to TO-DO APPLICATION")
+
   const navigate = useNavigate();
   const handleGetStarted = () => {
     navigate("/loginpage");
   };
-  //};
+  
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex justify-center items-center rounded-3xl">
