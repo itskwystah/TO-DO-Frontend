@@ -65,7 +65,7 @@ export default function DashboardPage() {
     }));
 
   return (
-    <div className="bg-[#9CAFAA] min-h-screen flex flex-col rounded-3xl">
+    <div className="bg-[#9CAFAA] h-screen flex flex-col rounded-3xl">
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-2">
         <div className="py-2 px-3">

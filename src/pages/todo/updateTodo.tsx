@@ -9,6 +9,7 @@ import logo from "@/assets/Logo2.png";
 
 // Modal
 import StatusModal from "@/pages/todo/modals/modals"; // adjust path if needed
+import { IoChevronBack } from "react-icons/io5";
 
 interface Todo {
   id: string;
@@ -126,10 +127,11 @@ export default function UpdateTodo() {
         </div>
 
         {/* Title */}
-        <div className="-mt-20 px-1">
-          <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
-          <div className="h-px bg-black mt-1 w-full max-w-260px" />
-        </div>
+        <div className="px-1 -mt-20 flex flex-row items-center gap-3" >
+                <IoChevronBack   onClick={() => navigate("/dashboardpage")} />
+                <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
+                {/* <div className="h-px bg-black mt-1 w-full max-w-260px" /> */}
+              </div>
 
         {/* Form */}
         <div className="mt-10 flex flex-col gap-6 px-2">
@@ -170,12 +172,7 @@ export default function UpdateTodo() {
             {updating ? "Updating..." : "UPDATE TASK"}
           </button>
 
-          <button
-            onClick={() => navigate("/dashboardpage")}
-            className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-lg hover:opacity-90 transition"
-          >
-            BACK
-          </button>
+
         </div>
       </div>
 

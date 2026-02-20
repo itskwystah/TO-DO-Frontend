@@ -9,6 +9,7 @@ import logo from "@/assets/Logo2.png";
 
 // Modal
 import StatusModal from "@/pages/todo/modals/modals"; // path to your modal
+import { IoChevronBack } from "react-icons/io5";
 
 export default function CreateTodo() {
   const navigate = useNavigate();
@@ -63,9 +64,10 @@ export default function CreateTodo() {
         </div>
 
         {/* Title */}
-        <div className="px-1 -mt-20">
+        <div className="px-1 -mt-20 flex flex-row items-center gap-3" >
+          <IoChevronBack   onClick={() => navigate("/dashboardpage")} />
           <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
-          <div className="h-px bg-black mt-1 w-full max-w-260px" />
+          {/* <div className="h-px bg-black mt-1 w-full max-w-260px" /> */}
         </div>
 
         {/* Form */}
@@ -100,16 +102,9 @@ export default function CreateTodo() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-lg hover:opacity-60 transition cursor-pointer"
+            className="bg-[#E5E5E5] px-4 py-2 rounded-xl shadow-lg hover:opacity-60 transition cursor-pointer"
           >
             {loading ? "Saving..." : " ADD NEW TASK"}
-          </button>
-
-          <button
-            onClick={() => navigate("/dashboardpage")}
-            className="bg-[#E5E5E5] px-6 py-2 rounded-xl shadow-md hover:opacity-60 transition cursor-pointer"
-          >
-             BACK
           </button>
         </div>
       </div>
