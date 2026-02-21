@@ -1,4 +1,4 @@
-// Libaries
+// Libraries
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTodoStore } from "@/store/todo/todo.store";
@@ -8,48 +8,41 @@ import InputFieldList from "@/components/InputFieldList";
 
 // Modals
 import SignOutModal from "@/pages/todo/modals/Signoutmodal";
+import FilterModal from "@/pages/todo/modals/filterModal";
 
 // Icons
-import { FaBars } from "react-icons/fa";
+import { IoFilter } from "react-icons/io5";
 
 // Assets
 import logo from "@/assets/Logo2.png";
+import { RiUserShared2Fill } from "react-icons/ri";
+
+type FilterType = "all" | "pending" | "completed";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-
   const { todos, loading, getTodos, updateTodo } = useTodoStore();
 
   const [showMenu, setShowMenu] = useState(false);
-  const [filter, setFilter] =
-    useState<"all" | "pending" | "completed">("all");
+  const [showFilter, setShowFilter] = useState(false);
+  const [filter, setFilter] = useState<FilterType>("all");
   const [loadingToggle, setLoadingToggle] = useState<string | null>(null);
 
-  // Fetch Task
   useEffect(() => {
     getTodos();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getTodos]);
 
-  // Navigation
   const createTodo = () => navigate("/createtodo");
 
-  // Toogle
   const toggleTask = async (taskId: string) => {
     const task = todos.find((t) => t._id === taskId);
     if (!task) return;
 
-    const newCompleted = !task.completed;
-
     setLoadingToggle(taskId);
-
-    // Optimistic UI update
-    await updateTodo(taskId, { completed: newCompleted });
-
+    await updateTodo(taskId, { completed: !task.completed });
     setLoadingToggle(null);
   };
 
-  //Filter
   const filteredTasks = todos
     .filter((task) => {
       if (filter === "pending") return !task.completed;
@@ -65,38 +58,51 @@ export default function DashboardPage() {
     }));
 
   return (
-    <div className="bg-[#9CAFAA] h-screen flex flex-col rounded-3xl">
+    <div className="bg-[#9CAFAA] h-screen flex flex-col rounded-3xl overflow-hidden">
       {/* Header */}
-      <div className="flex justify-between items-center px-4 py-2">
+      <div className="flex justify-between items-center px-4 py-2 shrink-0">
         <div className="py-2 px-3">
           <img src={logo} alt="Logo2" />
         </div>
         <button
           onClick={() => setShowMenu(true)}
-          className="text-black hover:opacity-80 transition -mt-38 cursor-pointer"
+          className="text-black hover:opacity-80 transition -mt-38 cursor-pointer "
         >
-          <FaBars size={26} />
+          <RiUserShared2Fill size={26} />
         </button>
       </div>
 
-      {/* Title */}
-      <div className="px-8 -mt-20">
-        <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
-        <div className="h-px bg-black mt-1 w-full max-w-260px" />
+      {/* Title & Filter */}
+      <div className="px-8 shrink-0 -mt-17">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
+
+          <IoFilter
+            size={24}
+            className="cursor-pointer hover:opacity-70"
+            onClick={() => setShowFilter(true)}
+          />
+        </div>
+
+        <div className="h-px bg-black mt-2 w-full"></div>
       </div>
 
-      {/* Add Task Button */}
-      <div className="px-8 mt-6">
+      {/* Add Task */}
+      <div className="px-8 mt-6 shrink-0">
         <button
           onClick={createTodo}
-          className="w-full text-black py-3 rounded-xl border border-[#E8DFC8] shadow-lg hover:opacity-90 transition cursor-pointer"
+          className="w-full py-3 rounded-xl border border-[#E8DFC8] shadow-lg hover:opacity-90 transition"
         >
-           ADD NEW TASK
+          ADD NEW TASK
         </button>
       </div>
 
-      {/* Task List */}
-      <div className="px-6 mt-5 flex-1">
+      {/* Scrollable Task List */}
+      <div
+        className="flex-1 min-h-0 overflow-y-auto px-6 mt-5 pb-5
+  [&::-webkit-scrollbar]:hidden
+  scrollbar-none"
+      >
         {loading ? (
           <p>Loading tasks...</p>
         ) : (
@@ -108,10 +114,12 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Sign Out / Filter Menu */}
-      <SignOutModal
-        show={showMenu}
-        onClose={() => setShowMenu(false)}
+      {/* Modals */}
+      <SignOutModal show={showMenu} onClose={() => setShowMenu(false)} />
+
+      <FilterModal
+        show={showFilter}
+        onClose={() => setShowFilter(false)}
         onFilterChange={setFilter}
       />
     </div>

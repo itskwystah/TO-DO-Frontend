@@ -16,6 +16,7 @@ import {
 
 // Icons
 import { FiSend } from "react-icons/fi";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function VerifyCode() {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ export default function VerifyCode() {
 
       await resendForgotPasswordOtpApi(email);
 
-      alert("OTP resent successfully!");
+       toast.success("OTP resent successfully!", { duration: 2500 });
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -89,6 +90,8 @@ export default function VerifyCode() {
 
   return (
     <div className="bg-[#9CAFAA] min-h-screen flex flex-col justify-center items-center rounded-3xl">
+       {/* Toast container */}
+      <Toaster position="top-center" />
       <div>
         <img src={logo} alt="Logo" className="w-30 h-30 mb-4" />
       </div>

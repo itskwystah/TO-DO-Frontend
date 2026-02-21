@@ -73,7 +73,7 @@ const InputFieldList = ({
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 w-full">
       {tasks.map((task) => (
         <div key={task.id} className="flex items-center gap-3 mb-4">
           <input
@@ -84,11 +84,11 @@ const InputFieldList = ({
             className="w-4 h-4 accent-black cursor-pointer"
           />
 
-          <div className="flex justify-between items-center bg-[#FBF3D5] flex-1 rounded-xl px-4 py-3 shadow-sm">
+          <div className="flex justify-between items-center bg-[#FBF3D5] w-full min-w-0 flex-1 rounded-xl px-4 py-3 shadow-sm">
             {/* Title */}
             <div className="flex-1 min-w-0">
               <span
-                className={`text-sm block ${
+                className={`text-[18px] block wrap-break-word ${
                   task.completed ? "line-through text-gray-500" : ""
                 }`}
               >
@@ -97,13 +97,13 @@ const InputFieldList = ({
 
               {/* Task description */}
               {task.description && (
-                <p className={`text-[10px] text-gray-600 mt-0.5 `}>
+                <p className={`text-[13px] text-gray-600 mt-0.5 wrap-break-word`}>
                   {task.description}
                 </p>
               )}
               {/* time and date */}
               {task.createdAt && (
-                <p className="text-[8px] text-gray-400 mt-1">
+                <p className="text-[10px] text-gray-400 mt-1">
                   {new Date(task.createdAt).toLocaleString()}
                 </p>
               )}

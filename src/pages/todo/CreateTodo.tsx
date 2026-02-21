@@ -66,14 +66,14 @@ export default function CreateTodo() {
         {/* Title */}
         <div className="px-1 -mt-20 flex flex-row items-center gap-3" >
           <IoChevronBack   onClick={() => navigate("/dashboardpage")} />
-          <h1 className="text-2xl font-bold tracking-wide">TO DO LIST</h1>
-          {/* <div className="h-px bg-black mt-1 w-full max-w-260px" /> */}
+          <h1 className="text-nowrap font-bold text-2xl tracking-wide">TO DO LIST</h1>
+           <div className="h-px bg-black -mb-10 -ml-42 w-full max-w-260px" /> 
         </div>
 
         {/* Form */}
         <div className="mt-10 flex flex-col gap-6 px-2">
           <div>
-            <label className="block text-sm -mt-8 mb-1">Title</label>
+            <label className="block text-sm -mt-5 mb-1">Title</label>
             <input
               type="text"
               placeholder="Title"
